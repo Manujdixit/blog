@@ -3,6 +3,9 @@ import { SignupInput } from "@manujdixit/medium-common";
 import React, { useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
+import "./css/auth.css";
+import { Input } from "@nextui-org/react";
+import { Button } from "@nextui-org/react";
 
 //trpc
 const Auth = ({ type }: { type: "signup" | "signin" }) => {
@@ -32,27 +35,25 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
   }
 
   return (
-    <div className="h-screen flex justify-center flex-col">
-      <div className="flex justify-center flex-col items-center">
-        <div className="text-4xl font-extrabold mb-1">
+    <div className="h-screen flex justify-center flex-col items-center">
+      <div className="flex justify-center flex-col  xl:max-w-screen-sm">
+        <div className="text-3xl font-bold tracking-tighter sm:text-5xl xl:text-6xl/none mb-2 font-libre">
           {type === "signin" ? (
-            <div>Remeber your credentials?</div>
+            <div>Ready to Dive In?</div>
           ) : (
-            <div>Create an account</div>
-          )}{" "}
+            <div>Join our growing community of writers</div>
+          )}
         </div>
-        <div className="text-slate-400 text-center mb-6">
-          {type === "signup"
-            ? "Already have an account?"
-            : "Don't have an account?"}
-          <Link
-            to={type === "signup" ? "/signin" : "/signup"}
-            className="underline"
-          >
-            {type === "signup" ? "Sign in" : "Sign up"}
-          </Link>
-        </div>
-        <div className="mb-4">
+        <p className="max-w-[600px] text-gray-500 md:text-xl dark:text-gray-400 mb-5">
+          {type === "signin" ? (
+            <div>Unlock your voice. Start your storytelling journey now.</div>
+          ) : (
+            <div>
+              Sign up today and start sharing your stories with the world.
+            </div>
+          )}
+        </p>
+        <div className="mb-4 space-y-4">
           {type === "signup" ? (
             <LabelledInput
               label="Name"
@@ -69,47 +70,52 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
               }}
             />
           ) : null}
-          <div>
-            <LabelledInput
-              label="Email"
-              placeholder="manuj@email.com"
-              onChange={(e) => {
-                // setpostInputs((c) => ({
-                //   ...c,
-                //   name: e.target.value,
-                // }));
-                setpostInputs({
-                  ...postInputs,
-                  username: e.target.value,
-                });
-              }}
-            />
-            <LabelledInput
-              label="Password"
-              type={"password"}
-              placeholder="123456"
-              onChange={(e) => {
-                // setpostInputs((c) => ({
-                //   ...c,
-                //   name: e.target.value,
-                // }));
-                setpostInputs({
-                  ...postInputs,
-                  password: e.target.value,
-                });
-              }}
-            />
-          </div>
+
+          <LabelledInput
+            label="Email"
+            placeholder="manuj@email.com"
+            onChange={(e) => {
+              // setpostInputs((c) => ({
+              //   ...c,
+              //   name: e.target.value,
+              // }));
+              setpostInputs({
+                ...postInputs,
+                username: e.target.value,
+              });
+            }}
+          />
+          <LabelledInput
+            label="Password"
+            type={"password"}
+            placeholder="123456"
+            onChange={(e) => {
+              // setpostInputs((c) => ({
+              //   ...c,
+              //   name: e.target.value,
+              // }));
+              setpostInputs({
+                ...postInputs,
+                password: e.target.value,
+              });
+            }}
+          />
         </div>
         <div>
-          <button
-            onClick={sendRequest}
-            type="button"
-            className="min-w-80 font-semibold text-white bg-gray-800 hover:bg-gray-900 
-                rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-700 dark:border-gray-700"
-          >
+          <Button onClick={sendRequest} color="primary" className="min-w-96">
             {type === "signup" ? "Sign up" : "Signin"}
-          </button>
+          </Button>
+        </div>
+        <div className="text-slate-400  mt-2">
+          {type === "signup"
+            ? "Already have an account? "
+            : "Don't have an account? "}
+          <Link
+            to={type === "signup" ? "/signin" : "/signup"}
+            className="underline"
+          >
+            {type === "signup" ? "Sign in" : "Sign up"}
+          </Link>
         </div>
       </div>
     </div>
@@ -121,25 +127,28 @@ export default Auth;
 interface LabelledInputType {
   type?: string;
   label: string;
-  placeholder: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-function LabelledInput({
-  type,
-  label,
-  placeholder,
-  onChange,
-}: LabelledInputType) {
+function LabelledInput({ type, label, onChange }: LabelledInputType) {
   return (
-    <div className=" p-1 ">
-      <label className="mb-2 text-sm  text-gray-900 dark:text-white font-bold">
-        {label}
-      </label>
-      <input
+    // <div>
+    //   <label className="mb-2 text-sm  text-gray-900 dark:text-white font-bold">
+    //     {label}
+    //   </label>
+    //   <input
+    //     type={type || "text"}
+    //     className="max-w-96 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+    //     placeholder={placeholder}
+    //     onChange={onChange}
+    //     required
+    //   />
+    // </div>
+    <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
+      <Input
+        className="max-w-96"
         type={type || "text"}
-        className="min-w-80 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-        placeholder={placeholder}
+        label={label}
         onChange={onChange}
         required
       />

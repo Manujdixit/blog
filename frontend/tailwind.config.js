@@ -9,6 +9,9 @@ export default {
   ],
   theme: {
     extend: {},
+    fontFamily: {
+      libre: ['"Libre Franklin"', "sans-serif"],
+    },
   },
   darkMode: "class",
   plugins: [nextui()],
