@@ -3,7 +3,6 @@ import { SignupInput } from "@manujdixit/medium-common";
 import React, { useState } from "react";
 import axios from "axios";
 import { BACKEND_URL } from "../config";
-import "./css/auth.css";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 
@@ -57,7 +56,6 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
           {type === "signup" ? (
             <LabelledInput
               label="Name"
-              placeholder="Manuj Dixit"
               onChange={(e) => {
                 // setpostInputs((c) => ({
                 //   ...c,
@@ -73,7 +71,6 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
 
           <LabelledInput
             label="Email"
-            placeholder="manuj@email.com"
             onChange={(e) => {
               // setpostInputs((c) => ({
               //   ...c,
@@ -88,7 +85,6 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
           <LabelledInput
             label="Password"
             type={"password"}
-            placeholder="123456"
             onChange={(e) => {
               // setpostInputs((c) => ({
               //   ...c,
