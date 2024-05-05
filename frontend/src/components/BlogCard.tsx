@@ -19,7 +19,7 @@ interface BlogCardType {
 
 const BlogCard = ({ authorName, title, description, date }: BlogCardType) => {
   return (
-    <div className="border border-slate-200 pb-4">
+    <div className="p-4 border-b border-slate-200 pb-4">
       <div className="flex flex-row items-center">
         <Avatar size="sm" src="https://api.dicebear.com/8.x/adventurer/svg" />
         <div className="ml-3 flex items-center">
@@ -33,7 +33,7 @@ const BlogCard = ({ authorName, title, description, date }: BlogCardType) => {
       <div className="text-md font-thin ">
         {description.slice(0, 100) + "..."}
       </div>
-      <div className="text-slate-500 text-sm font-thin">{`${Math.ceil(
+      <div className="text-slate-500 text-sm font-thin pt-4">{`${Math.ceil(
         description.length / 100
       )} min read`}</div>
     </div>

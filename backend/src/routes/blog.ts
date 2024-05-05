@@ -63,57 +63,130 @@ blogRouter.post("/", async (c) => {
   });
 });
 
-blogRouter.put("/:id", async (c) => {
-  const body = await c.req.json();
+blogRouter.get("/:id/blogs", async (c) => {
   const id = c.req.param("id");
-  const { success } = updateBlogInput.safeParse(body);
-  if (!success) {
-    c.status(411);
-    return c.json({
-      message: "Inputs not correct",
+  try {
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+
+    const user = await prisma.user.findUnique({
+      where: {
+        id: Number(id),
+      },
+      include: {
+        blogs: true,
+      },
     });
+    return c.json(user);
+  } catch (error) {
+    c.status(500);
+    console.error("Error fetching user:", error);
+    return c.json("Internal server error");
   }
-
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
-
-  const blog = await prisma.blog.update({
-    where: {
-      id: Number(id),
-    },
-    data: {
-      title: body.title,
-      content: body.content,
-    },
-  });
-
-  return c.json({
-    id: blog.id,
-  });
 });
 
 // Todo: add pagination
 blogRouter.get("/bulk", async (c) => {
-  const prisma = new PrismaClient({
-    datasourceUrl: c.env.DATABASE_URL,
-  }).$extends(withAccelerate());
-  const blogs = await prisma.blog.findMany({
-    select: {
-      content: true,
-      title: true,
-      id: true,
-      author: {
-        select: {
-          name: true,
+  let page = 1;
+  let limit = 10;
+  try {
+    page = Number(c.req.query("page"));
+    limit = Number(c.req.query("limit"));
+
+    console.log("page: " + page + ", limit:" + limit);
+
+    const skip = (page - 1) * limit;
+
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const blogs = await prisma.blog.findMany({
+      skip,
+      take: limit,
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true,
+          },
         },
       },
-    },
-  });
+    });
+    const totalblogs = await prisma.blog.count();
+    console.log(totalblogs);
 
-  return c.json({
-    blogs,
-  });
+    const totalPages = Math.ceil(totalblogs / limit);
+    console.log(totalPages);
+
+    c.status(200);
+    return c.json({
+      data: blogs,
+      meta: {
+        totalPages,
+        currentPage: page,
+        limit,
+      },
+    });
+  } catch (error) {
+    c.status(500);
+    c.json({
+      message: "Error while fetching blogs",
+    });
+  }
+});
+
+blogRouter.get("/bulk", async (c) => {
+  let page = 1;
+  let limit = 10;
+  try {
+    page = Number(c.req.query("page"));
+    limit = Number(c.req.query("limit"));
+
+    console.log("page: " + page + ", limit:" + limit);
+
+    const skip = (page - 1) * limit;
+
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const blogs = await prisma.blog.findMany({
+      skip,
+      take: limit,
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+    const totalblogs = await prisma.blog.count();
+    console.log(totalblogs);
+
+    const totalPages = Math.ceil(totalblogs / limit);
+    console.log(totalPages);
+
+    c.status(200);
+    return c.json({
+      data: blogs,
+      meta: {
+        totalPages,
+        currentPage: page,
+        limit,
+      },
+    });
+  } catch (error) {
+    c.status(500);
+    c.json({
+      message: "Error while fetching blogs",
+    });
+  }
 });
 
 blogRouter.get("/:id", async (c) => {
@@ -146,6 +219,30 @@ blogRouter.get("/:id", async (c) => {
     c.status(411); // 4
     return c.json({
       message: "Error while fetching blog post",
+    });
+  }
+});
+
+blogRouter.delete("/:id", async (c) => {
+  const id = c.req.param("id");
+  const prisma = new PrismaClient({
+    datasourceUrl: c.env.DATABASE_URL,
+  }).$extends(withAccelerate());
+
+  try {
+    const blog = await prisma.blog.delete({
+      where: {
+        id: Number(id),
+      },
+    });
+
+    return c.json({
+      blog,
+    });
+  } catch (e) {
+    c.status(411); // 4
+    return c.json({
+      message: "Error while deleting blog post",
     });
   }
 });
