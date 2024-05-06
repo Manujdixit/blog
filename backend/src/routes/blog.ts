@@ -95,8 +95,6 @@ blogRouter.get("/bulk", async (c) => {
     page = Number(c.req.query("page"));
     limit = Number(c.req.query("limit"));
 
-    console.log("page: " + page + ", limit:" + limit);
-
     const skip = (page - 1) * limit;
 
     const prisma = new PrismaClient({
@@ -120,15 +118,16 @@ blogRouter.get("/bulk", async (c) => {
         },
       },
     });
-    const totalblogs = await prisma.blog.count();
-    console.log(totalblogs);
+
+    const totalblogs = Object.keys(blogs).length;
+    // console.log(totalblogs);
 
     const totalPages = Math.ceil(totalblogs / limit);
-    console.log(totalPages);
+    // console.log(totalPages);
 
     c.status(200);
     return c.json({
-      data: blogs,
+      blogs: blogs,
       meta: {
         totalPages,
         currentPage: page,

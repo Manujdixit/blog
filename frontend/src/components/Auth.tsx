@@ -128,18 +128,6 @@ interface LabelledInputType {
 
 function LabelledInput({ type, label, onChange }: LabelledInputType) {
   return (
-    // <div>
-    //   <label className="mb-2 text-sm  text-gray-900 dark:text-white font-bold">
-    //     {label}
-    //   </label>
-    //   <input
-    //     type={type || "text"}
-    //     className="max-w-96 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-    //     placeholder={placeholder}
-    //     onChange={onChange}
-    //     required
-    //   />
-    // </div>
     <div className="flex w-full flex-wrap md:flex-nowrap gap-4">
       <Input
         className="max-w-96"
