@@ -1,7 +1,19 @@
 import Appbar from "../components/Appbar";
 import BlogCard from "../components/BlogCard";
+import Skeletonui from "../components/Skeletonui";
+import { useBlogs } from "../hooks";
 
 const Blogs = () => {
+  const { loading, blogs } = useBlogs();
+  if (loading)
+    return (
+      <div className="h-screen">
+        <Skeletonui />
+        <Skeletonui />
+        <Skeletonui />
+        <Skeletonui />
+      </div>
+    );
   return (
     <div>
       <Appbar />

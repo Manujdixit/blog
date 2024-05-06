@@ -55,6 +55,7 @@ blogRouter.post("/", async (c) => {
       title: body.title,
       content: body.content,
       authorId: Number(authorId),
+      published: body.published,
     },
   });
 
@@ -102,63 +103,16 @@ blogRouter.get("/bulk", async (c) => {
       datasourceUrl: c.env.DATABASE_URL,
     }).$extends(withAccelerate());
     const blogs = await prisma.blog.findMany({
+      where: {
+        published: true,
+      },
       skip,
       take: limit,
       select: {
         content: true,
         title: true,
         id: true,
-        author: {
-          select: {
-            name: true,
-          },
-        },
-      },
-    });
-    const totalblogs = await prisma.blog.count();
-    console.log(totalblogs);
-
-    const totalPages = Math.ceil(totalblogs / limit);
-    console.log(totalPages);
-
-    c.status(200);
-    return c.json({
-      data: blogs,
-      meta: {
-        totalPages,
-        currentPage: page,
-        limit,
-      },
-    });
-  } catch (error) {
-    c.status(500);
-    c.json({
-      message: "Error while fetching blogs",
-    });
-  }
-});
-
-blogRouter.get("/bulk", async (c) => {
-  let page = 1;
-  let limit = 10;
-  try {
-    page = Number(c.req.query("page"));
-    limit = Number(c.req.query("limit"));
-
-    console.log("page: " + page + ", limit:" + limit);
-
-    const skip = (page - 1) * limit;
-
-    const prisma = new PrismaClient({
-      datasourceUrl: c.env.DATABASE_URL,
-    }).$extends(withAccelerate());
-    const blogs = await prisma.blog.findMany({
-      skip,
-      take: limit,
-      select: {
-        content: true,
-        title: true,
-        id: true,
+        published: true,
         author: {
           select: {
             name: true,
