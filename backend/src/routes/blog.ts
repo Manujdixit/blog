@@ -18,6 +18,7 @@ blogRouter.use("/*", async (c, next) => {
   const authHeader = c.req.header("authorization") || "";
   try {
     const user = await verify(authHeader, c.env.JWT_SECRET);
+    console.log(user.id);
     if (user) {
       c.set("userId", user.id);
       await next();
@@ -37,13 +38,15 @@ blogRouter.use("/*", async (c, next) => {
 
 blogRouter.post("/", async (c) => {
   const body = await c.req.json();
-  const { success } = createBlogInput.safeParse(body);
-  if (!success) {
-    c.status(411);
-    return c.json({
-      message: "Inputs not correct",
-    });
-  }
+  console.log(body);
+
+  // const { success } = createBlogInput.safeParse(body);
+  // if (!success) {
+  //   c.status(411);
+  //   return c.json({
+  //     message: "Inputs not correct",
+  //   });
+  // }
 
   const authorId = c.get("userId");
   const prisma = new PrismaClient({
@@ -119,11 +122,13 @@ blogRouter.get("/bulk", async (c) => {
       },
     });
 
-    const totalblogs = Object.keys(blogs).length;
-    // console.log(totalblogs);
+    const totalBlogsCount = await prisma.blog.count({
+      where: {
+        published: true,
+      },
+    });
 
-    const totalPages = Math.ceil(totalblogs / limit);
-    // console.log(totalPages);
+    const totalPages = Math.ceil(totalBlogsCount / limit);
 
     c.status(200);
     return c.json({
@@ -156,6 +161,7 @@ blogRouter.get("/:id", async (c) => {
       select: {
         id: true,
         title: true,
+        published: true,
         content: true,
         author: {
           select: {

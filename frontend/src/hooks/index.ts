@@ -10,22 +10,48 @@ interface Blog {
   author: { name: string };
 }
 
-export const useBlogs = () => {
+export const useBlogs = (page: number) => {
   const [loading, setloading] = useState(true);
   const [blogs, setBlogs] = useState<Blog[]>([]);
+  const [totalpages, settotalpages] = useState<number>(1);
 
   useEffect(() => {
     axios
-      .get(`${BACKEND_URL}/api/v1/blog/bulk?page=1&limit=10`, {
+      .get(`${BACKEND_URL}/api/v1/blog/bulk?page=${page}&limit=10`, {
         headers: {
           Authorization: localStorage.getItem("token"),
         },
       })
       .then((res) => {
         setBlogs(res.data.blogs);
+        settotalpages(res.data.meta.totalPages);
+        setloading(false);
+      })
+      .catch((error) => {
+        console.error("Error fetching blogs:", error);
         setloading(false);
       });
-  }, []);
+  }, [page]);
 
-  return { loading, blogs };
+  return { loading, blogs, totalpages };
+};
+
+export const useBlog = ({ id }: { id: string }) => {
+  const [loading, setloading] = useState(true);
+  const [blog, setBlog] = useState<Blog>();
+
+  useEffect(() => {
+    axios
+      .get(`${BACKEND_URL}/api/v1/blog/${id}`, {
+        headers: {
+          Authorization: localStorage.getItem("token"),
+        },
+      })
+      .then((res) => {
+        setBlog(res.data.blog);
+        setloading(false);
+      });
+  }, [id]);
+
+  return { loading, blog };
 };

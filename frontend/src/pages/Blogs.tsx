@@ -1,10 +1,17 @@
+import { Pagination } from "@nextui-org/react";
 import Appbar from "../components/Appbar";
 import BlogCard from "../components/BlogCard";
 import Skeletonui from "../components/Skeletonui";
 import { useBlogs } from "../hooks";
+import { useState } from "react";
 
 const Blogs = () => {
-  const { loading, blogs } = useBlogs();
+  const [currentpage, setcurrentpage] = useState(1);
+  const { loading, blogs, totalpages } = useBlogs(currentpage);
+
+  const handlePageChange = (pageNumber: number) => {
+    setcurrentpage(pageNumber);
+  };
 
   return (
     <div>
@@ -26,10 +33,21 @@ const Blogs = () => {
                   id={blog.id}
                   authorName={blog.author.name}
                   title={blog.title}
-                  description={blog.content}
+                  content={blog.content}
                   date="2 Nov 2024"
                 />
               ))}
+              <div className="p-5 flex justify-center">
+                <Pagination
+                  showShadow
+                  total={totalpages}
+                  page={currentpage}
+                  onChange={handlePageChange}
+                  initialPage={1}
+                  showControls={true}
+                  variant="bordered"
+                />
+              </div>
             </>
           )}
         </div>

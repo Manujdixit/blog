@@ -5,7 +5,7 @@ interface BlogCardType {
   id: number;
   authorName: string;
   title: string;
-  description: string;
+  content: string;
   date: string;
   //   image: string;
   // id: string;
@@ -19,13 +19,7 @@ interface BlogCardType {
   // rating: number;
 }
 
-const BlogCard = ({
-  authorName,
-  title,
-  id,
-  description,
-  date,
-}: BlogCardType) => {
+const BlogCard = ({ authorName, title, id, content, date }: BlogCardType) => {
   return (
     <Link to={`/blog/${id}`}>
       <div className="p-4 border-b border-slate-200 pb-4 cursor-pointer">
@@ -40,10 +34,10 @@ const BlogCard = ({
 
         <div className="text-xl font-semibold">{title}</div>
         <div className="text-md font-thin ">
-          {description.slice(0, 100) + "..."}
+          {content.slice(0, 100) + "..."}
         </div>
         <div className="text-slate-500 text-sm font-thin pt-4">{`${Math.ceil(
-          description.length / 100
+          content.length / 100
         )} min read`}</div>
       </div>
     </Link>
