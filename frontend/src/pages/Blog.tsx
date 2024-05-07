@@ -8,7 +8,7 @@ const Blog = () => {
     id: id || "",
   });
 
-  if (loading) return <div>Loading...</div>;
+  if (loading || !blog) return <div>Loading...</div>;
 
   return (
     <div>
