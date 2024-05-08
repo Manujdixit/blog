@@ -2,7 +2,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { SignupInput } from "@manujdixit/medium-common";
 import React, { useState } from "react";
 import axios from "axios";
-import { BACKEND_URL } from "../config";
+import { BASE_URL } from "../config";
 import { Input } from "@nextui-org/react";
 import { Button } from "@nextui-org/react";
 
@@ -20,8 +20,8 @@ const Auth = ({ type }: { type: "signup" | "signin" }) => {
       // console.log(postInputs);
       const response = await axios.post(
         type === "signup"
-          ? `${BACKEND_URL}/api/v1/user/signup`
-          : `${BACKEND_URL}/api/v1/user/signin`,
+          ? `${BASE_URL}/api/v1/user/signup`
+          : `${BASE_URL}/api/v1/user/signin`,
         postInputs
       );
       // console.log(response);

@@ -1,6 +1,6 @@
 import { Button, Input, Textarea } from "@nextui-org/react";
 import axios from "axios";
-import { BACKEND_URL } from "../config";
+import { BASE_URL } from "../config";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
@@ -12,7 +12,7 @@ const Create = () => {
   function publish() {
     axios
       .post(
-        `${BACKEND_URL}/api/v1/blog`,
+        `${BASE_URL}/api/v1/blog`,
         {
           title,
           content,
@@ -35,7 +35,7 @@ const Create = () => {
   function draft() {
     axios
       .post(
-        `${BACKEND_URL}/api/v1/blog`,
+        `${BASE_URL}/api/v1/blog`,
         {
           title,
           content,
