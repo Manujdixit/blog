@@ -6,6 +6,8 @@ interface Blog {
   id: number;
   published: boolean;
   author: { name: string };
+  formattedDate: string;
+  formattedTime: string;
 }
 
 const FullBlog = ({ blog }: { blog: Blog }) => {
@@ -16,7 +18,7 @@ const FullBlog = ({ blog }: { blog: Blog }) => {
           <div className="col-span-8 ">
             <div className="text-5xl font-extrabold">{blog.title}</div>
             <div className="text-slate-500 pt-2">
-              Posted on 2nd October 1997
+              Posted on {blog.formattedDate} at {blog.formattedTime}
             </div>
             <div className="pt-2">{blog.content}</div>
           </div>

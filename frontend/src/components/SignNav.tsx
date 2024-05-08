@@ -1,47 +1,57 @@
-import React from "react";
 import {
   Navbar,
   NavbarBrand,
   NavbarContent,
   NavbarItem,
-  NavbarMenuToggle,
-  NavbarMenu,
-  NavbarMenuItem,
+  // NavbarMenuToggle,
+  // NavbarMenu,
+  // NavbarMenuItem,
   Link,
   Button,
 } from "@nextui-org/react";
+import { useNavigate } from "react-router-dom";
 // import { AcmeLogo } from "./AcmeLogo.jsx";
 
 export default function SignNav() {
-  const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  // const [isMenuOpen, setIsMenuOpen] = React.useState(false);
 
-  const menuItems = [
-    "Profile",
-    "Dashboard",
-    "Activity",
-    "Analytics",
-    "System",
-    "Deployments",
-    "My Settings",
-    "Team Settings",
-    "Help & Feedback",
-    "Log Out",
-  ];
+  // const menuItems = [
+  //   "Profile",
+  //   "Dashboard",
+  //   "Activity",
+  //   "Analytics",
+  //   "System",
+  //   "Deployments",
+  //   "My Settings",
+  //   "Team Settings",
+  //   "Help & Feedback",
+  //   "Log Out",
+  // ];
+  const navigate = useNavigate();
+
+  function Home() {
+    navigate("/");
+  }
 
   return (
-    <Navbar onMenuOpenChange={setIsMenuOpen}>
+    <Navbar
+      height={"6rem"}
+      // className="bg-red-200"
+      // onMenuOpenChange={setIsMenuOpen}
+      isBordered={true}
+      maxWidth="xl"
+    >
       <NavbarContent>
-        <NavbarMenuToggle
+        {/* <NavbarMenuToggle
           aria-label={isMenuOpen ? "Close menu" : "Open menu"}
           className="sm:hidden"
-        />
-        <NavbarBrand>
-          {/* <AcmeLogo /> */}
-          <p className="font-bold text-inherit">ACME</p>
+        /> */}
+        <NavbarBrand onClick={Home} className="  cursor-pointer">
+          <p className="text-3xl font-semibold text-inherit">Blogsy</p>
         </NavbarBrand>
       </NavbarContent>
 
-      <NavbarContent className="hidden sm:flex gap-4" justify="center">
+      {/* <NavbarContent className="hidden sm:flex gap-4" justify="center">
         <NavbarItem>
           <Link color="foreground" href="#">
             Features
@@ -57,18 +67,18 @@ export default function SignNav() {
             Integrations
           </Link>
         </NavbarItem>
-      </NavbarContent>
+      </NavbarContent> */}
       <NavbarContent justify="end">
         <NavbarItem className="hidden lg:flex">
-          <Link href="#">Login</Link>
+          <Link href="/signin">Sign in</Link>
         </NavbarItem>
         <NavbarItem>
-          <Button as={Link} color="primary" href="#" variant="flat">
+          <Button as={Link} color="primary" href="/" variant="flat">
             Sign Up
           </Button>
         </NavbarItem>
       </NavbarContent>
-      <NavbarMenu>
+      {/* <NavbarMenu>
         {menuItems.map((item, index) => (
           <NavbarMenuItem key={`${item}-${index}`}>
             <Link
@@ -87,7 +97,7 @@ export default function SignNav() {
             </Link>
           </NavbarMenuItem>
         ))}
-      </NavbarMenu>
+      </NavbarMenu> */}
     </Navbar>
   );
 }

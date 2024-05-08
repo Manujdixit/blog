@@ -18,7 +18,6 @@ blogRouter.use("/*", async (c, next) => {
   const authHeader = c.req.header("authorization") || "";
   try {
     const user = await verify(authHeader, c.env.JWT_SECRET);
-    console.log(user.id);
     if (user) {
       c.set("userId", user.id);
       await next();
@@ -38,15 +37,14 @@ blogRouter.use("/*", async (c, next) => {
 
 blogRouter.post("/", async (c) => {
   const body = await c.req.json();
-  console.log(body);
 
-  // const { success } = createBlogInput.safeParse(body);
-  // if (!success) {
-  //   c.status(411);
-  //   return c.json({
-  //     message: "Inputs not correct",
-  //   });
-  // }
+  const { success } = createBlogInput.safeParse(body);
+  if (!success) {
+    c.status(411);
+    return c.json({
+      message: "Inputs not correct",
+    });
+  }
 
   const authorId = c.get("userId");
   const prisma = new PrismaClient({
@@ -119,12 +117,69 @@ blogRouter.get("/bulk", async (c) => {
             name: true,
           },
         },
+        datetime: true,
       },
     });
 
     const totalBlogsCount = await prisma.blog.count({
       where: {
         published: true,
+      },
+    });
+
+    const totalPages = Math.ceil(totalBlogsCount / limit);
+
+    c.status(200);
+    return c.json({
+      blogs: blogs,
+      meta: {
+        totalPages,
+        currentPage: page,
+        limit,
+      },
+    });
+  } catch (error) {
+    c.status(500);
+    c.json({
+      message: "Error while fetching blogs",
+    });
+  }
+});
+
+blogRouter.get("/bulk/drafts", async (c) => {
+  let page = 1;
+  let limit = 10;
+  try {
+    page = Number(c.req.query("page"));
+    limit = Number(c.req.query("limit"));
+
+    const skip = (page - 1) * limit;
+
+    const prisma = new PrismaClient({
+      datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate());
+    const blogs = await prisma.blog.findMany({
+      where: {
+        published: false,
+      },
+      skip,
+      take: limit,
+      select: {
+        content: true,
+        title: true,
+        id: true,
+        published: true,
+        author: {
+          select: {
+            name: true,
+          },
+        },
+      },
+    });
+
+    const totalBlogsCount = await prisma.blog.count({
+      where: {
+        published: false,
       },
     });
 
@@ -168,6 +223,7 @@ blogRouter.get("/:id", async (c) => {
             name: true,
           },
         },
+        datetime: true,
       },
     });
 

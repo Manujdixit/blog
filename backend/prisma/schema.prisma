@@ -23,4 +23,5 @@ model Blog {
   title       String
   published Boolean  @default(false)
   author    User @relation(fields: [authorId], references: [id])
+  datetime DateTime @default(now())
 }

@@ -1,4 +1,4 @@
-import { Avatar } from "@nextui-org/avatar";
+// import { Avatar } from "@nextui-org/react";
 import { Link } from "react-router-dom";
 
 interface BlogCardType {
@@ -20,15 +20,25 @@ interface BlogCardType {
 }
 
 const BlogCard = ({ authorName, title, id, content, date }: BlogCardType) => {
+  const getInitials = (name: string) => {
+    return name
+      .split(" ")
+      .map((part: string) => part.charAt(0))
+      .join("")
+      .toUpperCase();
+  };
+
   return (
     <Link to={`/blog/${id}`}>
       <div className="p-4 border-b border-slate-200 pb-4 cursor-pointer">
         <div className="flex flex-row items-center">
-          <Avatar size="sm" src="https://api.dicebear.com/8.x/adventurer/svg" />
+          <div className="avatar  flex justify-center items-center bg-black w-6 h-6 rounded-full text-white font-normal text-sm">
+            <span>{getInitials(authorName)}</span>
+          </div>
           <div className="ml-3 flex items-center">
             <span className="font-extralight">{authorName}</span>
             <span className="text-xs px-1">&#9679;</span>
-            <span className="font-thin text-slate-400">{date}</span>
+            <span className="font-light text-slate-500">{date}</span>
           </div>
         </div>
 

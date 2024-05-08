@@ -5,17 +5,18 @@ import Blog from "./pages/Blog";
 import Blogs from "./pages/Blogs";
 import "./App.css";
 import Create from "./pages/Create";
+import Protected from "./components/Protected";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <Routes>
-          <Route path="/signup" element={<Signup />} />
+          <Route path="/" element={<Signup />} />
           <Route path="/signin" element={<Signin />} />
-          <Route path="/blog/:id" element={<Blog />} />
-          <Route path="/blogs" element={<Blogs />} />
-          <Route path="/create" element={<Create />} />
+          <Route path="/blogs" element={<Protected Component={Blogs} />} />
+          <Route path="/blog/:id" element={<Protected Component={Blog} />} />
+          <Route path="/create" element={<Protected Component={Create} />} />
         </Routes>
       </BrowserRouter>
     </>

@@ -1,6 +1,8 @@
 import { useParams } from "react-router-dom";
 import FullBlog from "../components/FullBlog";
 import { useBlog } from "../hooks";
+import Appbar from "../components/Appbar";
+import { Spinner } from "@nextui-org/react";
 
 const Blog = () => {
   const { id } = useParams();
@@ -8,11 +10,16 @@ const Blog = () => {
     id: id || "",
   });
 
-  if (loading || !blog) return <div>Loading...</div>;
-
   return (
     <div>
-      <FullBlog blog={blog} />
+      <Appbar />
+      {loading || !blog ? (
+        <div className="w-full h-screen flex justify-center">
+          <Spinner size="lg" color="success" />
+        </div>
+      ) : (
+        <FullBlog blog={blog} />
+      )}
     </div>
   );
 };

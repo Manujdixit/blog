@@ -34,7 +34,7 @@ const Blogs = () => {
                   authorName={blog.author.name}
                   title={blog.title}
                   content={blog.content}
-                  date="2 Nov 2024"
+                  date={blog.formattedDate}
                 />
               ))}
               <div className="p-5 flex justify-center">
